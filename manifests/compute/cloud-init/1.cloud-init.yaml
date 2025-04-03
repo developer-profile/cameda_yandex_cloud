@@ -1,0 +1,46 @@
+# Cloud init устанавливает ПО из блока packages;
+# Создаёт файл с содержимым, зашифрованным в base64 по пути /opt/test;
+# Задаёт пароль для пользователя cameda - nfkbfy12;
+# Пробрасывает публичную часть ssh ключа в ВМ;
+# Содержимое файла cloud-init.yaml представлено ниже. В файл вставляем всё содержимое, начиная с cloud-config.
+
+#cloud-config
+  version: v1
+  package_update: true
+  package_upgrade: true
+  write_files:
+   - encoding: b64
+     content: VGVzc3R0dC4uLg==
+     owner: root:root
+     path: /opt/test
+     permissions: '0644'
+  packages:
+  - git
+  - htop
+  - mc
+  - tree
+  - make
+  - iftop
+  - iotop
+  - dstat
+  - nginx
+  - gcc
+  - gdb
+  datasource:
+   Ec2:
+    strict_id: false
+  users:
+  - default
+  - name: cameda
+    gecos: Alexey Volkov
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    lock_passwd: false
+    plain_text_passwd: 'nfkbfy12'
+    ssh_authorized_keys:
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDI98mJDBN9cnp6HOdBYTQILeAhUSDvDfoqA9iLmVPDyPLFRWs7tE4BjCAcFD6a3M50QIboCaohfa7h+PWksYibab7I3QHOR7y9pCW8FGonGRw2ACvt906qlaWHFj7jWOxuihFoiRROKqLCW5YE/Yc4XFIvW1gu3JQdvQ1wemWvujsI8EHE6PI1pEg7/41y6kn3IhNHIr8WRLe4dPyPGjwc4LpBCcaRSJiX4YjVXynSIHNk365UrL+nGv8ix7bW5FNCgGqSgfUTVCfMYLzQ/gYHPVQrcIvCeHjkwluH8Z3gXeN3OliejBjpLi+IWIzd9K6UADSUNU8oL+9941tDidp8APoe7RbB4h3bY6k8Bhy0yxohgQS2OWSYd1mjeEx8Ba5wzJKqfpUgmcPdrBJnBwLgLMFQyEfYG6vTPkYWAKEvkkJ6ZiA4tdoQvCb+B0xJV/ivHyLtoi3LFE59mbQFDUy8O51vX9JjBDLwzyTEeslWp7uOP66Ti5Q5ucNXbs5yXTU= cameda@cameda-osx"
+  runcmd:
+    - [ sh, -xc, "echo $(date) ': Hello, world!' > /tmp/file" ]
+  final_message: |
+    Hello, Cameda! I finished install all what you need! VM is READY!
