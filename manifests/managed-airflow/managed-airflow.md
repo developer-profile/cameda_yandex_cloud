@@ -10,7 +10,7 @@ export ZONE=ru-central1-d
 export SA=$(yc iam service-account get cam-airflow --folder-name cameda-practicum --format json | jq -r '.id')
 export NETWORK=$(yc vpc network get cameda-practicum --folder-name cameda-practicum --format json | jq -r '.id')
 export SUBNET=$(yc vpc subnet get subnet-d --folder-name cameda-practicum --format json | jq -r '.id')
-export SG=$(yc vpc sg get k8s-sg --folder-name cameda-practicum --format=json | jq -r '.id')
+export SG=$(yc vpc sg get cam-all --folder-name cameda-practicum --format=json | jq -r '.id')
 export BUCKET=cam-flow
 export PASS=P@$$w0rd
 ```
